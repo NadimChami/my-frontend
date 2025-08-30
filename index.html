@@ -1,0 +1,1223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Cognitive Function Under Sound</title>
+<script>
+  window.onload = function () {
+    const status = localStorage.getItem("participantStatus");
+
+    if (status === "ineligible" || status === "completed") {
+      document.body.innerHTML = `
+        <div id="block-screen">
+          <div class="block-message">
+            <h2>Thank you for your interest</h2>
+            <p>
+              ${
+                status === "ineligible"
+                  ? "Unfortunately, based on your answers, you are not eligible to participate in this study."
+                  : "You have already completed this study. We sincerely appreciate your participation!"
+              }
+            </p>
+          </div>
+        </div>
+      `;
+      const style = document.createElement('style');
+      style.innerHTML = `
+        #block-screen {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          height: 100vh;
+          background-color: #f4f4f4;
+          font-family: Arial, sans-serif;
+        }
+        .block-message {
+          background: white;
+          padding: 2rem 2.5rem;
+          border-radius: 8px;
+          box-shadow: 0 0 12px rgba(0,0,0,0.1);
+          max-width: 500px;
+          text-align: center;
+        }
+        .block-message h2 {
+          color: #2c3e50;
+          margin-bottom: 1rem;
+        }
+        .block-message p {
+          font-size: 1rem;
+          color: #555;
+        }
+      `;
+      document.head.appendChild(style);
+    } else {
+      document.getElementById("main-content").style.display = "block";
+    }
+  };
+</script>
+
+
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <main>
+    <div id="main-content" style="display: none;">
+
+    <!-- =============================== -->
+    <!-- Welcome -->
+    <!-- =============================== -->
+    <section id="page-welcome" class="page active">
+      <h1>Cognitive Tasks Battery</h1>
+      <p>Researchers: Nadim Chami (<a href="mailto:nadimchami.research@gmail.com">nadimchami.research@gmail.com</a>) and Ece Kaya</p>
+      <p>
+      Thank you for your interest! This study takes about <strong>???? minutes</strong> and involves brief questionnaires and cognitive games. Your participation is anonymous and voluntary. You may stop at any time. <br> <strong> Please try your best on all parts, solving accurately and calmly helps the research be meaningful for all of us.</strong> 
+      </p>
+      <button id="welcome-next">Next</button>
+      <div class="footer-text">
+        Your responses are used solely for research purposes
+      </div>
+    </section>
+
+    <!-- =============================== -->
+    <!-- Volume Calibration -->
+    <!-- =============================== -->
+    <section id="page-volume" class="page">
+      <p>Please set up your audio. To ensure a consistent experience, please:</p>
+      <ol>
+        <li>Turn on volume to 100%.</li>
+        <li>Please use any headphones or earphones. We do not recommend using your device's built-in speaker.</li>
+      </ol>
+      <p>When you’re ready, click “Next” to continue.</p>
+      <button id="volume-next">Next</button>
+      <div class="footer-text">
+        Your responses are used solely for research purposes
+      </div>
+    </section>
+
+
+
+
+
+<section id="page-language" class="page">
+  <h2>Language Proficiency Survey</h2>
+
+  <!-- Native Language -->
+  <label for="native-language">Please indicate your native language:</label>
+  <select id="native-language" name="native-language" required>
+    <option value="" disabled selected>Select your native language</option>
+    <option value="English">English</option>
+    <option value="Spanish">Spanish</option>
+    <option value="Mandarin">Mandarin/Chinese</option>
+    <option value="Hindi">Hindi</option>
+    <option value="Arabic">Arabic</option>
+    <option value="Portuguese">French</option>
+    <option value="Russian">Russian</option>
+    <option value="French">Turkish</option>
+    <option value="Japanese">Japanese</option>
+    <option value="German">German</option>
+    <option value="French">Portuguese</option>
+    <option value="Other">Other</option>
+  </select>
+
+  <!-- English Skill Slider -->
+  <label for="english-skill" style="margin-top: 1.5rem;">Please rate your English skills from 1 (beginner) to 10 (advanced):</label>
+  <div style="display: flex; align-items: center; gap: 1rem;">
+    <input
+      type="range"
+      id="english-skill"
+      name="english-skill"
+      min="1"
+      max="10"
+      step="1"
+      value="5" 
+      required
+      oninput="document.getElementById('skill-output').value = this.value"
+    >
+    <output id="skill-output" for="english-skill">5</output>
+  </div>
+
+  <!-- Next Button -->
+  <div style="margin-top: 2rem;">
+    <button id="language-next">Next</button>
+  </div>
+</section>
+
+    <!-- =============================== -->
+    <!-- Eligibility & Consent -->
+    <!-- =============================== -->
+    <section id="page-eligibility" class="page">
+      <p>Please select your age range:</p>
+      <fieldset>
+        <legend>Age Range</legend>
+        <div class="radio-group">
+          <label class="option-label" for="age-14-17">
+            <input type="radio" id="age-14-17" name="age-range" value="14-17" />
+            14–17
+          </label>
+          <label class="option-label" for="age-18-22">
+            <input type="radio" id="age-18-22" name="age-range" value="18-22" />
+            18–22
+          </label>
+        </div>
+      </fieldset>
+      <button id="eligibility-next">Next</button>
+      <div class="footer-text">
+        Your responses are used solely for research purposes
+      </div>
+    </section>
+
+    <!-- =============================== -->
+    <!-- Parental Consent (if 14–17) -->
+    <!-- =============================== -->
+    <section id="page-parent-consent" class="page">
+      <h2>Parental/Guardian Consent (Ages 14–17)</h2>
+      <p>
+        Hello! We’re studying how different background sounds affect cognitive abilities in 14–17 year olds. Your child will spend about <strong>????? minutes</strong> online,
+        answering a few questions and playing simple “brain games.”
+      </p>
+      <p><strong>What to know:</strong></p>
+      <ul>
+        <li>No special risks: Just everyday computer use.</li>
+        <li>Your child can stop anytime.</li>
+        <li>All answers are anonymous. We do not collect your name. We only ask you to check the box below and date this form to confirm your permission.</li>
+      </ul>
+      <p><strong>Why it matters:</strong></p>
+      <p>We hope these insights can improve learning tools and environments for people of all ages.</p>
+      <p>By checking the box below and dating this form, you’re saying you understand what’s involved and agree to let your child participate.</p>
+      <fieldset>
+        <legend>Parental/Guardian Consent</legend>
+        <div class="checkbox-group">
+          <label class="option-label" for="parent-consent-checkbox">
+            <input type="checkbox" id="parent-consent-checkbox" />
+            I’ve read this and agree to let my child take part.
+          </label>
+        </div>
+        <label for="parent-consent-date">
+          Today's date:
+          <input type="date" id="parent-consent-date" />
+        </label>
+      </fieldset>
+      <button id="parent-consent-next">Next</button>
+      <div class="footer-text">
+         Your responses are used solely for research purposes.
+      </div>
+    </section>
+
+    <!-- =============================== -->
+    <!-- Youth Assent (if 14–17) -->
+    <!-- =============================== -->
+    <section id="page-youth-assent" class="page">
+      <h2>Youth Assent (Ages 14–17)</h2>
+      <p>
+        Hi there! You’re invited to join a short online study about how sounds affect your cognition. You’ll answer
+        some questions and try a few fun tasks—it should take around <strong>???minutes</strong>.
+      </p>
+      <ul>
+        <li>You’re in charge: You can quit anytime.</li>
+        <li>It’s anonymous: We won’t collect your name here.</li>
+      </ul>
+      <p>If this sounds okay, check the box below to say you want to participate.</p>
+      <fieldset>
+        <legend>Youth Assent</legend>
+        <div class="checkbox-group">
+          <label class="option-label" for="youth-assent-checkbox">
+            <input type="checkbox" id="youth-assent-checkbox" />
+            I’ve read this and agree to take part.
+          </label>
+        </div>
+      </fieldset>
+      <button id="youth-assent-next">Next</button>
+      <div class="footer-text">
+        Your responses are used solely for research purposes.
+      </div>
+    </section>
+
+    <!-- =============================== -->
+    <!-- Adult Consent (if 18–22) -->
+    <!-- =============================== -->
+    <section id="page-adult-consent" class="page">
+      <h2>Adult Consent (Ages 18–22)</h2>
+      <p>Informed Consent</p>
+      <p>
+        Hi there! You’re being invited to participate in a study about how specific sounds influence your cognitive abilities. 
+      </p>
+      <p><strong>What happens:</strong></p>
+      <ul>
+        <li>You’ll complete a few quick surveys and play some simple tasks online (about ??? minutes total).</li>
+        <li>All activity is anonymous and voluntary—you can stop at any time.</li>
+        <li>There’s no special risk beyond normal computer use.</li>
+      </ul>
+      <p><strong>Why it matters:</strong></p>
+      <p>We hope these insights can improve learning tools and environments for people of all ages.</p>
+      <p>If you understand and agree, please check the box below to consent.</p>
+      <fieldset>
+        <legend>Adult Consent</legend>
+        <div class="checkbox-group">
+          <label class="option-label" for="adult-consent-checkbox">
+            <input type="checkbox" id="adult-consent-checkbox" />
+            I’m 18 or older, I’ve read this, and I agree to participate.
+          </label>
+        </div>
+      </fieldset>
+      <button id="adult-consent-next">Next</button>
+      <div class="footer-text">
+        Your responses are used solely for research purposes.
+      </div>
+    </section>
+
+    <!-- =============================== -->
+    <!-- Conditions/Checkboxes Only -->
+    <!-- =============================== -->
+    <section id="page-conditions" class="page">
+      <p>Please indicate if you have any of the following (check all that apply):</p>
+      <fieldset>
+        <legend>Health &amp; Training</legend>
+        <div class="checkbox-group">
+          <label class="option-label" for="cond-hearing">
+            <input type="checkbox" id="cond-hearing" />
+            Hearing difficulties
+          </label>
+          <label class="option-label" for="cond-music">
+            <input type="checkbox" id="cond-music" />
+            Prior music training
+          </label>
+          <label class="option-label" for="cond-asd">
+            <input type="checkbox" id="cond-asd" />
+            ASD (Autism spectrum disorder)
+          </label>
+          <label class="option-label" for="cond-ptsd">
+            <input type="checkbox" id="cond-ptsd" />
+            PTSD (Post-traumatic stress disorder)
+          </label>
+          <label class="option-label" for="cond-dyslexia">
+            <input type="checkbox" id="cond-dyslexia" />
+            Dyslexia
+          </label>
+          <label class="option-label" for="cond-hyperlexia">
+            <input type="checkbox" id="cond-hyperlexia" />
+            Hyperlexia
+          </label>
+          <label class="option-label" for="cond-none">
+            <input type="checkbox" id="cond-none" />
+            None of the above
+          </label>
+        </div>
+      </fieldset>
+      <button id="conditions-next">Next</button>
+      <div class="footer-text">
+        Your responses are used solely for research purposes
+      </div>
+    </section>
+
+    <!-- =============================== -->
+    <!-- Ineligible Notice -->
+    <!-- =============================== -->
+    <section id="page-ineligible" class="page">
+      <h2>Not Eligible</h2>
+      <p>
+      “Thank you for your interest, but you do not meet the eligibility criteria for this study due to our controls on prior music training, neurodevelopmental or psychological conditions (such as ADHD, PTSD, ASD, or dyslexia), or hearing difficulties. This is absolutely not a problem or judgment of any kind, these factors can simply influence the data in ways that affect our study's accuracy, and that's the only reason for this limitation.”
+      </p>
+      <div class="footer-text">
+        Your responses are used solely for research purposes
+      </div>
+    </section>
+
+    <!-- =============================== -->
+    <!-- Gender-->
+    <!-- =============================== -->
+    <section id="page-gender" class="page">
+      <p>What is your gender?</p>
+      <fieldset>
+        <legend>Gender</legend>
+        <div class="radio-group">
+          <label class="option-label" for="gender-male">
+            <input type="radio" id="gender-male" name="gender" value="Male" />
+            Male
+          </label>
+          <label class="option-label" for="gender-female">
+            <input type="radio" id="gender-female" name="gender" value="Female" />
+            Female
+          </label>
+          <label class="option-label" for="gender-nonbinary">
+            <input type="radio" id="gender-nonbinary" name="gender" value="Non-binary" />
+            Non-binary
+          </label>
+          <label class="option-label" for="gender-none">
+            <input type="radio" id="gender-none" name="gender" value="Prefer not to say" />
+            Prefer not to say
+          </label>
+        </div>
+      </fieldset>
+      <button id="gender-next">Next</button>
+      <div class="footer-text">
+        Your responses are used solely for research purposes
+      </div>
+    </section>
+
+
+
+    <!-- =============================== -->
+    <!-- Page 15: ADHD Instruction -->
+    <!-- =============================== -->
+    <section id="page-adhd-instr" class="page">
+      <p class="instruction-text">
+        Please answer the questions below rating yourself over the past 6 months.
+      </p>
+      <button id="adhd-instr-next">Next</button>
+      <div class="footer-text">
+        Your responses are used solely for research purposes
+      </div>
+    </section>
+
+    <!-- =============================== -->
+    <!-- Page 16: ADHD Q1 -->
+    <!-- =============================== -->
+    <section id="page-adhd-1" class="page">
+      <fieldset>
+        <legend>How often do you have trouble wrapping up the final details of a project, once the challenging parts have been done</legend>
+        <div class="radio-group">
+          <label class="option-label" for="adhd1-1">
+            <input type="radio" id="adhd1-1" name="a1" value="1" />
+            Never
+          </label>
+          <label class="option-label" for="adhd1-2">
+            <input type="radio" id="adhd1-2" name="a1" value="2" />
+            Rarely
+          </label>
+          <label class="option-label" for="adhd1-3">
+            <input type="radio" id="adhd1-3" name="a1" value="3" />
+            Sometimes
+          </label>
+          <label class="option-label" for="adhd1-4">
+            <input type="radio" id="adhd1-4" name="a1" value="4" />
+            Often
+          </label>
+          <label class="option-label" for="adhd1-5">
+            <input type="radio" id="adhd1-5" name="a1" value="5" />
+            Very Often
+          </label>
+        </div>
+      </fieldset>
+      <button id="adhd1-next">Next</button>
+      <div class="footer-text">
+        Your responses are used solely for research purposes
+      </div>
+    </section>
+
+    <!-- =============================== -->
+    <!-- Page 17: ADHD Q2 -->
+    <!-- =============================== -->
+    <section id="page-adhd-2" class="page">
+      <fieldset>
+        <legend>How often do you have difficulty getting things in order when you have to do a task that requires organization</legend>
+        <div class="radio-group">
+          <label class="option-label" for="adhd2-1">
+            <input type="radio" id="adhd2-1" name="a2" value="1" />
+            Never
+          </label>
+          <label class="option-label" for="adhd2-2">
+            <input type="radio" id="adhd2-2" name="a2" value="2" />
+            Rarely
+          </label>
+          <label class="option-label" for="adhd2-3">
+            <input type="radio" id="adhd2-3" name="a2" value="3" />
+            Sometimes
+          </label>
+          <label class="option-label" for="adhd2-4">
+            <input type="radio" id="adhd2-4" name="a2" value="4" />
+            Often
+          </label>
+          <label class="option-label" for="adhd2-5">
+            <input type="radio" id="adhd2-5" name="a2" value="5" />
+            Very Often
+          </label>
+        </div>
+      </fieldset>
+      <button id="adhd2-next">Next</button>
+      <div class="footer-text">
+        Your responses are used solely for research purposes
+      </div>
+    </section>
+
+    <!-- =============================== -->
+    <!-- Page 18: ADHD Q3 -->
+    <!-- =============================== -->
+    <section id="page-adhd-3" class="page">
+      <fieldset>
+        <legend>How often do you have problems remembering appointments or obligations</legend>
+        <div class="radio-group">
+          <label class="option-label" for="adhd3-1">
+            <input type="radio" id="adhd3-1" name="a3" value="1" />
+            Never
+          </label>
+          <label class="option-label" for="adhd3-2">
+            <input type="radio" id="adhd3-2" name="a3" value="2" />
+            Rarely
+          </label>
+          <label class="option-label" for="adhd3-3">
+            <input type="radio" id="adhd3-3" name="a3" value="3" />
+            Sometimes
+          </label>
+          <label class="option-label" for="adhd3-4">
+            <input type="radio" id="adhd3-4" name="a3" value="4" />
+            Often
+          </label>
+          <label class="option-label" for="adhd3-5">
+            <input type="radio" id="adhd3-5" name="a3" value="5" />
+            Very Often
+          </label>
+        </div>
+      </fieldset>
+      <button id="adhd3-next">Next</button>
+      <div class="footer-text">
+        Your responses are used solely for research purposes
+      </div>
+    </section>
+
+    <!-- =============================== -->
+    <!-- Page 19: ADHD Q4 -->
+    <!-- =============================== -->
+    <section id="page-adhd-4" class="page">
+      <fieldset>
+        <legend>When you have a task that requires a lot of thought, how often do you avoid or delay getting started</legend>
+        <div class="radio-group">
+          <label class="option-label" for="adhd4-1">
+            <input type="radio" id="adhd4-1" name="a4" value="1" />
+            Never
+          </label>
+          <label class="option-label" for="adhd4-2">
+            <input type="radio" id="adhd4-2" name="a4" value="2" />
+            Rarely
+          </label>
+          <label class="option-label" for="adhd4-3">
+            <input type="radio" id="adhd4-3" name="a4" value="3" />
+            Sometimes
+          </label>
+          <label class="option-label" for="adhd4-4">
+            <input type="radio" id="adhd4-4" name="a4" value="4" />
+            Often
+          </label>
+          <label class="option-label" for="adhd4-5">
+            <input type="radio" id="adhd4-5" name="a4" value="5" />
+            Very Often
+          </label>
+        </div>
+      </fieldset>
+      <button id="adhd4-next">Next</button>
+      <div class="footer-text">
+        Your responses are used solely for research purposes
+      </div>
+    </section>
+
+    <!-- =============================== -->
+    <!-- Page 20: ADHD Q5 -->
+    <!-- =============================== -->
+    <section id="page-adhd-5" class="page">
+      <fieldset>
+        <legend>How often do you fidget or squirm with your hands or feet when you have to sit down for a long time</legend>
+        <div class="radio-group">
+          <label class="option-label" for="adhd5-1">
+            <input type="radio" id="adhd5-1" name="a5" value="1" />
+            Never
+          </label>
+          <label class="option-label" for="adhd5-2">
+            <input type="radio" id="adhd5-2" name="a5" value="2" />
+            Rarely
+          </label>
+          <label class="option-label" for="adhd5-3">
+            <input type="radio" id="adhd5-3" name="a5" value="3" />
+            Sometimes
+          </label>
+          <label class="option-label" for="adhd5-4">
+            <input type="radio" id="adhd5-4" name="a5" value="4" />
+            Often
+          </label>
+          <label class="option-label" for="adhd5-5">
+            <input type="radio" id="adhd5-5" name="a5" value="5" />
+            Very Often
+          </label>
+        </div>
+      </fieldset>
+      <button id="adhd5-next">Next</button>
+      <div class="footer-text">
+        Your responses are used solely for research purposes
+      </div>
+    </section>
+
+    <!-- =============================== -->
+    <!-- Page 21: ADHD Q6 -->
+    <!-- =============================== -->
+    <section id="page-adhd-6" class="page">
+      <fieldset>
+        <legend>How often do you feel overly active and compelled to do things, like you were driven by a motor</legend>
+        <div class="radio-group">
+          <label class="option-label" for="adhd6-1">
+            <input type="radio" id="adhd6-1" name="a6" value="1" />
+            Never
+          </label>
+          <label class="option-label" for="adhd6-2">
+            <input type="radio" id="adhd6-2" name="a6" value="2" />
+            Rarely
+          </label>
+          <label class="option-label" for="adhd6-3">
+            <input type="radio" id="adhd6-3" name="a6" value="3" />
+            Sometimes
+          </label>
+          <label class="option-label" for="adhd6-4">
+            <input type="radio" id="adhd6-4" name="a6" value="4" />
+            Often
+          </label>
+          <label class="option-label" for="adhd6-5">
+            <input type="radio" id="adhd6-5" name="a6" value="5" />
+            Very Often
+          </label>
+        </div>
+      </fieldset>
+      <button id="adhd6-submit">Next</button>
+      <div class="footer-text">
+        Your responses are used solely for research purposes
+      </div>
+    </section>
+
+    <!-- =============================== -->
+    <!-- Tasks Intro -->
+    <!-- =============================== -->
+    <section id="page-tasks-intro" class="page">
+      <h2>Let’s Begin the Tasks!</h2>
+      <p> 
+      You're about to start a series of short, engaging activities. Some tasks will include music, others will involve silence or other sounds. They're designed to be fun and insightful. Please do your best to stay quick and accurate. Remember, this isn't a test of how “smart” you are. It's about how you think and focus.
+      <p/>
+      <button id="tasks-start">Start</button>
+      <div class="footer-text">
+        Your responses are used solely for research purposes
+      </div>
+    </section>
+
+    <!- =============================== -->
+    <!-- Page 23: Attention Instruction -->
+    <!-- =============================== -->
+    <section id="page-attn-instr" class="page">
+      <p> 
+      First, let’s start with a fun go no-go task! <br>
+      Press “GO” when you see a blue square and do nothing when you see a red square. <br> 
+      Try to be as fast and accurate as possible.<br> 
+      But first, let us practice with 10 trials.
+
+      </p>
+      <button id="attn-instr-next">Next</button>
+      <div class="footer-text">
+        Your responses are used solely for research purposes
+      </div>
+    </section>
+
+    <!-- =============================== -->
+    <!-- Page 24: Attention Practice (2 trials, with feedback) -->
+    <!-- =============================== -->
+    <section id="page-attn-practice" class="page">
+      <h2>Practice</h2>
+      <div id="attn-practice-container">
+        <div id="attn-practice-stim"></div>
+        <button id="attn-practice-go-button" disabled>GO</button>
+        <div id="attn-practice-feedback" style="margin-top:20px; font-size:1.25rem;"></div>
+      </div>
+    </section>
+
+    <!-- =============================== -->
+    <!-- Page 25: Attention Get-Ready for Real Test -->
+    <!-- =============================== -->
+    <section id="page-attn-getready" class="page">
+      <h2>Get ready for the real test!</h2>
+      <p>(You will start shortly.)</p>
+    </section>
+
+    <!-- =============================== -->
+    <!-- Page 26: Attention Actual (2 trials, no feedback) -->
+    <!-- =============================== -->
+    <section id="page-attn-actual" class="page">
+      <h2>Attention Task (2 Trials)</h2>
+      <div id="attn-actual-container">
+        <div id="attn-actual-stim"></div>
+        <button id="attn-actual-go-button" disabled>GO</button>
+      </div>
+    </section>
+
+    <!-- =============================== -->
+    <!-- Page 27: Memory Block Intro -->
+    <!-- =============================== -->
+    <section id="page-memory-intro" class="page">
+      
+      <p>
+        We now continue with two fun memory exercises. <br>
+        Click “Next” to begin the first exercise.
+      </p>
+      <button id="memory-intro-next" type="button">Next</button>
+      <div class="footer-text">
+        Your responses are used solely for research purposes
+      </div>
+    </section>
+
+
+<!-- =============================== -->
+<!-- Numbered Grid Reproduction (10 Trials of 3×3) -->
+<!-- =============================== -->
+
+<!-- Instruction Page -->
+<section id="page-grid-instr" class="page">
+  <p>
+    Memorize the location and value of 6 numbered tiles in 3×3 grids for 10 seconds each, then you’ll have to reproduce each grid. <br>
+    Click “Next” to start.
+
+  </p>
+  <button id="grid-instr-next" type="button">Start</button>
+  <div class="footer-text">
+    Your responses are used solely for research purposes
+  </div>
+</section>
+
+<!-- Display Grid -->
+<section id="page-grid-display" class="page">
+  <h2>Memorize This Grid</h2>
+  <div class="progress-bar-container">
+    <div id="grid-display-progress" class="progress-bar-fill"></div>
+  </div>
+  <div id="grid-display-board" class="grid-3x3-wrapper"></div>
+</section>
+
+<!-- Get Ready -->
+<section id="page-grid-getready" class="page">
+  <h2>Get Ready…</h2>
+  <div class="progress-bar-container">
+    <div id="grid-getready-progress" class="progress-bar-fill"></div>
+  </div>
+</section>
+
+<!-- Recall Grid -->
+<section id="page-grid-recall" class="page">
+  <h2>Reproduce the Grid</h2>
+  <div class="progress-bar-container">
+    <div id="grid-recall-progress" class="progress-bar-fill"></div>
+  </div>
+  <div id="grid-recall-board" class="grid-3x3-wrapper"></div>
+  <div id="grid-card-palette" class="card-palette"></div>
+  <button id="grid-submit" type="button">Submit</button>
+</section>
+
+    <!-- =============================== -->
+    <!-- 6.3 Word Pair Reconstruction -->
+    <!-- =============================== -->
+
+    <!-- Page 36: Word-Pair Instruction -->
+    <section id="page-word-instr" class="page">
+      
+      <p>
+        For the second exercise, you will see 10 word pairs, one pair at a time for 5 seconds each. Remember the word pairs because you will have to choose the missing word for each pair from the options you’ll be given. <br>
+        Click “Next” when ready.
+
+      </p>
+      <button id="word-instr-next" type="button">Next</button>
+      <div class="footer-text">
+        Your responses are used solely for research purposes
+      </div>
+    </section>
+
+    <!-- Page 37: Word Pair Display (6×5 s) -->
+    <section id="page-word-display" class="page">
+      <h2>Memorize These Pairs</h2>
+      <div class="progress-bar-container">
+        <div id="word-display-progress" class="progress-bar-fill"></div>
+      </div>
+      <div id="word-pair-container" style="font-size:2rem; margin-top:24px; text-align:center;"></div>
+    </section>
+
+    <!-- Page 38: Word Pair Get Ready (10 s) -->
+    <section id="page-word-getready" class="page">
+      <h2>Get ready…</h2>
+      <div class="progress-bar-container">
+        <div id="word-getready-progress" class="progress-bar-fill"></div>
+      </div>
+    </section>
+
+    <!-- Pages 39–44: Word Pair Recall (6 pages, 10 s each) -->
+    <section id="page-word-recall-0" class="page"></section>
+    <section id="page-word-recall-1" class="page"></section>
+    <section id="page-word-recall-2" class="page"></section>
+    <section id="page-word-recall-3" class="page"></section>
+    <section id="page-word-recall-4" class="page"></section>
+    <section id="page-word-recall-5" class="page"></section>
+    <section id="page-word-recall-6" class="page"></section>
+    <section id="page-word-recall-7" class="page"></section>
+    <section id="page-word-recall-8" class="page"></section>
+    <section id="page-word-recall-9" class="page"></section>
+
+
+  <!-- =============================== -->
+  <!-- Shared ICAR Timer (hidden until ICAR starts) -->
+  <!-- =============================== -->
+  <div id="icar-shared-timer" style="display:none; margin:0 auto 16px; max-width:600px;">
+    <div class="progress-bar-container" style="margin-bottom:8px;">
+      <div id="icar-progress-bar" class="progress-bar-fill"></div>
+    </div>
+    <div id="icar-timer" style="text-align:right; font-size:1.1rem;">05:00</div>
+  </div>
+
+  <!-- =============================== -->
+  <!-- ICAR Intelligence Test Intro -->
+  <!-- =============================== -->
+  <section id="page-icar-intro" class="page">
+    
+    <p> Good job! <br>
+        Let’s now do something a little bit different and fun! <br>
+        You will solve these 4 puzzles in a total duration of <strong>5 minutes</strong>. Solve as fast and accurately as you can.
+    </p>
+    <button id="icar-intro-next">Next</button>
+    <div class="footer-text">
+      Your responses are anonymous and used for research only.
+    </div>
+  </section>
+
+  <!-- =============================== -->
+  <!-- ICAR Question 1 (Visual Completion) -->
+  <!-- =============================== -->
+  <section id="page-icar-0" class="page">
+    <h2>Question 1 of 4</h2>
+    <p>Please indicate which is the best answer to complete the figure below.</p>
+    <div style="text-align:center; margin:16px 0;">
+      <img src="images/icar-figure.png" alt="Incomplete figure" style="max-width:60%;" />
+    </div>
+    <div class="checkbox-grid" style="grid-template-columns: repeat(3,1fr); gap:8px;">
+      <label><input type="radio" name="icar-0" value="0" /><img src="images/icar-0-a.png" alt="A" /></label>
+      <label><input type="radio" name="icar-0" value="1" /><img src="images/icar-0-b.png" alt="B" /></label>
+      <label><input type="radio" name="icar-0" value="2" /><img src="images/icar-0-c.png" alt="C" /></label>
+      <label><input type="radio" name="icar-0" value="3" /><img src="images/icar-0-d.png" alt="D" /></label>
+      <label><input type="radio" name="icar-0" value="4" /><img src="images/icar-0-e.png" alt="E" /></label>
+      <label><input type="radio" name="icar-0" value="5" /><img src="images/icar-0-f.png" alt="F" /></label>
+    </div>
+    <button id="icar-next-0">Next</button>
+  </section>
+
+  <!-- =============================== -->
+  <!-- ICAR Question 2 (Alphanumeric Series) -->
+  <!-- =============================== -->
+  <section id="page-icar-1" class="page">
+    <h2>Question 2 of 4</h2>
+    <div class="sequence-question" style="text-align:center; margin:16px 0;">
+      <strong>V Q M J H ?</strong>
+    </div>
+    <div class="word-options">
+      <label><input type="radio" name="icar-1" value="E" /> E</label>
+      <label><input type="radio" name="icar-1" value="F" /> F</label>
+      <label><input type="radio" name="icar-1" value="G" /> G</label>
+      <label><input type="radio" name="icar-1" value="H" /> H</label>
+      <label><input type="radio" name="icar-1" value="I" /> I</label>
+      <label><input type="radio" name="icar-1" value="J" /> J</label>
+    </div>
+    <button id="icar-next-1">Next</button>
+  </section>
+
+  <!-- =============================== -->
+  <!-- ICAR Question 3 (Comparative Logic) -->
+  <!-- =============================== -->
+  <section id="page-icar-2" class="page">
+    <h2>Question 3 of 4</h2>
+    <p>Zach is taller than Matt and Richard is shorter than Zach. Which is most accurate?</p>
+    <div class="word-options">
+      <label><input type="radio" name="icar-2" value="1" /> Richard is taller than Matt.</label>
+      <label><input type="radio" name="icar-2" value="2" /> Richard is shorter than Matt.</label>
+      <label><input type="radio" name="icar-2" value="3" /> Richard is as tall as Matt.</label>
+      <label><input type="radio" name="icar-2" value="4" /> It’s impossible to tell.</label>
+    </div>
+    <button id="icar-next-2">Next</button>
+  </section>
+
+  <!-- =============================== -->
+  <!-- ICAR Question 4 (Cube Rotation) -->
+  <!-- =============================== -->
+  <section id="page-icar-3" class="page">
+    <h2>Question 4 of 4</h2>
+    <p>Select the choice that represents a rotation of the cube labeled X.</p>
+    <div style="text-align:center; margin:16px 0;">
+      <img src="images/icar-cube-x.png" alt="Cube X" style="max-width:40%;" />
+    </div>
+    <div class="checkbox-grid" style="grid-template-columns: repeat(4,1fr); gap:8px;">
+      <label><input type="radio" name="icar-3" value="A" /> A</label>
+      <label><input type="radio" name="icar-3" value="B" /> B</label>
+      <label><input type="radio" name="icar-3" value="C" /> C</label>
+      <label><input type="radio" name="icar-3" value="D" /> D</label>
+      <label><input type="radio" name="icar-3" value="E" /> E</label>
+      <label><input type="radio" name="icar-3" value="F" /> F</label>
+      <label><input type="radio" name="icar-3" value="G" /> G</label>
+      <label><input type="radio" name="icar-3" value="H" /> H</label>
+    </div>
+    <button id="icar-submit">Finish</button>
+  </section>
+
+    <!-- =============================== -->
+    <!-- Page 46: Brain Games Intro -->
+    <!-- =============================== -->
+    <section id="page-brain-intro" class="page">
+      <h2>Amazing!</h2>
+      <p>
+        Amazing! <br>
+        Next up are some quick-thinking challenges. Focus, do your best, and try to be both fast and accurate. <br>
+        Click “Next” when ready.
+
+      </p>
+      <button id="brain-intro-next">Next</button>
+      <div class="footer-text">
+        Your responses are used solely for research purposes.
+      </div>
+    </section>
+
+<!-- =============================== -->
+<!-- Page 47: Odd-One-Out Intro -->
+<!-- =============================== -->
+<section id="page-odd-intro" class="page">
+  
+  <p>For the following exercise, select the item that differs from the others. Be fast! <br>
+    Click “Next” to start.
+</p>
+  <button id="odd-intro-next">Next</button>
+  <div class="footer-text">
+   Your responses are used solely for research purposes.
+  </div>
+</section>
+
+<!-- =============================== -->
+<!-- Page 48-57: Odd-One-Out Trials 1 to 10 -->
+<!-- =============================== -->
+
+<section id="page-odd-0" class="page"></section>
+<section id="page-odd-1" class="page"></section>
+<section id="page-odd-2" class="page"></section>
+<section id="page-odd-3" class="page"></section>
+<section id="page-odd-4" class="page"></section>
+<section id="page-odd-5" class="page"></section>
+<section id="page-odd-6" class="page"></section>
+<section id="page-odd-7" class="page"></section>
+<section id="page-odd-8" class="page"></section>
+<section id="page-odd-9" class="page"></section>
+<section id="page-odd-10" class="page"></section>
+<section id="page-odd-11" class="page"></section>
+<section id="page-odd-12" class="page"></section>
+<section id="page-odd-13" class="page"></section>
+
+    <!-- =============================== -->
+    <!-- Page 52: Symbol Decoding Instruction -->
+    <!-- =============================== -->
+    <section id="page-symbol-instr" class="page">
+      
+      <p>
+        Good spotting!<br>
+        Now you will be shown symbols and the letter or number associated with each. Decode the symbol sequence and select the correct word or number from four options. Be fast and accurate! <br>
+        Click “Next” to begin.
+
+      </p>
+      <button id="symbol-instr-next">Next</button>
+      <div class="footer-text">
+        Your responses are used solely for research purposes.
+      </div>
+    </section>
+
+    <!-- Pages 53–55: Symbol Decoding Trials -->
+    <section id="page-symbol-0" class="page"></section>
+    <section id="page-symbol-1" class="page"></section>
+    <section id="page-symbol-2" class="page"></section>
+    <section id="page-symbol-3" class="page"></section>
+    <section id="page-symbol-4" class="page"></section>
+    <section id="page-symbol-5" class="page"></section>
+
+
+<!-- =============================== -->
+<!-- 63: Magnitude Comparison Intro -->
+<!-- =============================== -->
+<section id="page-magnitude-instr" class="page">
+  
+  <p>
+    Well done!<br />
+    And now we have reached our final game!<br />
+    Which mathematical expression result is larger? Tap the correct card as quickly as you can. <br>
+    Click “Next” to begin.
+  
+  </p>
+  <button id="magnitude-instr-next">Next</button>
+  <div class="footer-text">
+  Your responses are used solely for research purposes.
+  </div>
+</section>
+
+<!-- =============================== -->
+<!-- Trial 1 (page-magnitude-0) – 7 s -->
+<!-- =============================== -->
+<section id="page-magnitude-0" class="page">
+  <div class="progress-bar-container">
+    <div id="magnitude-bar-0" class="progress-bar-fill"></div>
+  </div>
+  <div class="mag-comparison-container">
+    <div class="mag-card" id="mag-left-0">8 + 9</div>
+    <div class="mag-card" id="mag-right-0">5 × 3</div>
+  </div>
+  <div class="footer-text">
+    Your responses are used solely for research purposes
+  </div>
+</section>
+
+<!-- =============================== -->
+<!-- Trial 2 (page-magnitude-1) – 7 s -->
+<!-- =============================== -->
+<section id="page-magnitude-1" class="page">
+  <div class="progress-bar-container">
+    <div id="magnitude-bar-1" class="progress-bar-fill"></div>
+  </div>
+  <div class="mag-comparison-container">
+    <div class="mag-card" id="mag-left-1">14 − 6</div>
+    <div class="mag-card" id="mag-right-1">3 × 3</div>
+  </div>
+  <div class="footer-text">
+    Your responses are used solely for research purposes
+  </div>
+</section>
+
+<!-- =============================== -->
+<!-- Trial 3 (page-magnitude-2) – 7 s -->
+<!-- =============================== -->
+<section id="page-magnitude-2" class="page">
+  <div class="progress-bar-container">
+    <div id="magnitude-bar-2" class="progress-bar-fill"></div>
+  </div>
+  <div class="mag-comparison-container">
+    <div class="mag-card" id="mag-left-2">7 × 3</div>
+    <div class="mag-card" id="mag-right-2">25 − 3</div>
+  </div>
+  <div class="footer-text">
+    Your responses are used solely for research purposes
+  </div>
+</section>
+
+<!-- =============================== -->
+<!-- Trial 4 (page-magnitude-3) – 7 s -->
+<!-- =============================== -->
+<section id="page-magnitude-3" class="page">
+  <div class="progress-bar-container">
+    <div id="magnitude-bar-3" class="progress-bar-fill"></div>
+  </div>
+  <div class="mag-comparison-container">
+    <div class="mag-card" id="mag-left-3">12 + 5</div>
+    <div class="mag-card" id="mag-right-3">3 × 5</div>
+  </div>
+  <div class="footer-text">
+    Your responses are used solely for research purposes
+  </div>
+</section>
+
+<!-- =============================== -->
+<!-- Trial 5 (page-magnitude-4) – 7 s -->
+<!-- =============================== -->
+<section id="page-magnitude-4" class="page">
+  <div class="progress-bar-container">
+    <div id="magnitude-bar-4" class="progress-bar-fill"></div>
+  </div>
+  <div class="mag-comparison-container">
+    <div class="mag-card" id="mag-left-4">15 − 7</div>
+    <div class="mag-card" id="mag-right-4">3 × 3</div>
+  </div>
+  <div class="footer-text">
+    Your responses are used solely for research purposes
+  </div>
+</section>
+
+<!-- =============================== -->
+<!-- Trial 6 (page-magnitude-5) – 7 s -->
+<!-- =============================== -->
+<section id="page-magnitude-5" class="page">
+  <div class="progress-bar-container">
+    <div id="magnitude-bar-5" class="progress-bar-fill"></div>
+  </div>
+  <div class="mag-comparison-container">
+    <div class="mag-card" id="mag-left-5">9 + 4</div>
+    <div class="mag-card" id="mag-right-5">6 × 2</div>
+  </div>
+  <div class="footer-text">
+    Your responses are used solely for research purposes
+  </div>
+</section>
+
+<!-- =============================== -->
+<!-- Trial 7 (page-magnitude-6) – 7 s -->
+<!-- =============================== -->
+<section id="page-magnitude-6" class="page">
+  <div class="progress-bar-container">
+    <div id="magnitude-bar-6" class="progress-bar-fill"></div>
+  </div>
+  <div class="mag-comparison-container">
+    <div class="mag-card" id="mag-left-6">18 − 5</div>
+    <div class="mag-card" id="mag-right-6">4 × 3</div>
+  </div>
+  <div class="footer-text">
+    Your responses are used solely for research purposes
+  </div>
+</section>
+
+<!-- =============================== -->
+<!-- Trial 8 (page-magnitude-7) – 7 s -->
+<!-- =============================== -->
+<section id="page-magnitude-7" class="page">
+  <div class="progress-bar-container">
+    <div id="magnitude-bar-7" class="progress-bar-fill"></div>
+  </div>
+  <div class="mag-comparison-container">
+    <div class="mag-card" id="mag-left-7">5 × 4</div>
+    <div class="mag-card" id="mag-right-7">22 − 3</div>
+  </div>
+  <div class="footer-text">
+    Your responses are used solely for research purposes
+  </div>
+</section>
+
+<!-- =============================== -->
+<!-- Trial 9 (page-magnitude-8) – 7 s -->
+<!-- =============================== -->
+<section id="page-magnitude-8" class="page">
+  <div class="progress-bar-container">
+    <div id="magnitude-bar-8" class="progress-bar-fill"></div>
+  </div>
+  <div class="mag-comparison-container">
+    <div class="mag-card" id="mag-left-8">20 − 8</div>
+    <div class="mag-card" id="mag-right-8">3 × 5</div>
+  </div>
+  <div class="footer-text">
+    Your responses are used solely for research purposes
+  </div>
+</section>
+
+<!-- =============================== -->
+<!-- Trial 10 (page-magnitude-9) – 7 s -->
+<!-- =============================== -->
+<section id="page-magnitude-9" class="page">
+  <div class="progress-bar-container">
+    <div id="magnitude-bar-9" class="progress-bar-fill"></div>
+  </div>
+  <div class="mag-comparison-container">
+    <div class="mag-card" id="mag-left-9">7 × 2</div>
+    <div class="mag-card" id="mag-right-9">10 + 3</div>
+  </div>
+  <div class="footer-text">
+    Your responses are used solely for research purposes
+  </div>
+</section>
+
+<!-- =============================== -->
+<!-- Trial 11 (page-magnitude-10) – 7 s -->
+<!-- =============================== -->
+<section id="page-magnitude-10" class="page">
+  <div class="progress-bar-container">
+    <div id="magnitude-bar-10" class="progress-bar-fill"></div>
+  </div>
+  <div class="mag-comparison-container">
+    <div class="mag-card" id="mag-left-10">12 − 7</div>
+    <div class="mag-card" id="mag-right-10">2 × 3</div>
+  </div>
+  <div class="footer-text">
+    Your responses are used solely for research purposes
+  </div>
+</section>
+
+<!-- =============================== -->
+<!-- Trial 12 (page-magnitude-11) – 7 s -->
+<!-- =============================== -->
+<section id="page-magnitude-11" class="page">
+  <div class="progress-bar-container">
+    <div id="magnitude-bar-11" class="progress-bar-fill"></div>
+  </div>
+  <div class="mag-comparison-container">
+    <div class="mag-card" id="mag-left-11">4 × 5</div>
+    <div class="mag-card" id="mag-right-11">11 + 6</div>
+  </div>
+  <div class="footer-text">
+    Your responses are used solely for research purposes
+  </div>
+</section>
+
+<!-- =============================== -->
+<!-- Trial 13 (page-magnitude-12) – 7 s -->
+<!-- =============================== -->
+<section id="page-magnitude-12" class="page">
+  <div class="progress-bar-container">
+    <div id="magnitude-bar-12" class="progress-bar-fill"></div>
+  </div>
+  <div class="mag-comparison-container">
+    <div class="mag-card" id="mag-left-12">19 − 8</div>
+    <div class="mag-card" id="mag-right-12">2 × 6</div>
+  </div>
+  <div class="footer-text">
+    Your responses are used solely for research purposes
+  </div>
+</section>
+
+
+
+
+    <!-- =============================== -->
+    <!-- Page 70: Post‐Task Survey -->
+    <!-- =============================== -->
+    <section id="page-post-survey" class="page">
+      <h2>Post‐Task Survey</h2>
+      <p>That was very good! <br>
+        We hope you enjoyed these fun games! <br>
+        Please answer these questions before leaving:</p>
+      <form id="post-survey-form">
+        <fieldset>
+          <legend>1. To what extent did the background sound help you concentrate compared to silence?</legend>
+          <div class="radio-group">
+            <label class="option-label"><input type="radio" name="ps1" value="1" /> 1 (Not at all)</label>
+            <label class="option-label"><input type="radio" name="ps1" value="2" /> 2</label>
+            <label class="option-label"><input type="radio" name="ps1" value="3" /> 3</label>
+            <label class="option-label"><input type="radio" name="ps1" value="4" /> 4</label>
+            <label class="option-label"><input type="radio" name="ps1" value="5" /> 5 (Extremely)</label>
+          </div>
+        </fieldset>
+        <fieldset>
+          <legend>2. How distracting was the background sound?</legend>
+          <div class="radio-group">
+            <label class="option-label"><input type="radio" name="ps2" value="1" /> 1 (Not at all)</label>
+            <label class="option-label"><input type="radio" name="ps2" value="2" /> 2</label>
+            <label class="option-label"><input type="radio" name="ps2" value="3" /> 3</label>
+            <label class="option-label"><input type="radio" name="ps2" value="4" /> 4</label>
+            <label class="option-label"><input type="radio" name="ps2" value="5" /> 5 (Extremely)</label>
+          </div>
+        </fieldset>
+        <fieldset>
+          <legend>3. Overall, how engaged did you feel? Did you like the experience?</legend>
+          <div class="radio-group">
+            <label class="option-label"><input type="radio" name="ps3" value="1" /> 1 (Not at all)</label>
+            <label class="option-label"><input type="radio" name="ps3" value="2" /> 2</label>
+            <label class="option-label"><input type="radio" name="ps3" value="3" /> 3</label>
+            <label class="option-label"><input type="radio" name="ps3" value="4" /> 4</label>
+            <label class="option-label"><input type="radio" name="ps3" value="5" /> 5 (Extremely)</label>
+          </div>
+        </fieldset>
+        <button id="post-survey-submit" type"button">Finish</button>
+      </form>
+      <div class="footer-text">
+        Your responses are used solely for research purposes.
+      </div>
+    </section>
+
+    <!-- =============================== -->
+    <!-- Page 71: Final Thank You -->
+    <!-- =============================== -->
+    <section id="page-final-thankyou" class="page">
+    <h2>Thank you for participating!</h2>
+    <p>Your data will help us understand how background sounds affect thinking and learning.</p>
+    <p>Questions or comments? Contact Nadim Chami at <a href="mailto:nadimchami.research@gmail.com">nadimchami.research@gmail.com</a>.</p>
+    <div class="footer-text">
+      Your responses are used solely for research purposes.
+    </div>
+    </section>
+  <!-- =============================== -->
+  <!-- External JS -->
+  <!-- =============================== -->
+  <script src="script.js"></script>
+</body>
+</html>
+
