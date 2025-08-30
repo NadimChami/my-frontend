@@ -571,7 +571,7 @@ function runPracticeTrial() {
       const t2 = setTimeout(() => {
         goToPage("page-attn-actual");
         startActualTrials();
-      }, 4000);
+      }, 5000);
       practiceTimeouts.push(t2);
     }, 500);
     practiceTimeouts.push(t);
@@ -633,15 +633,15 @@ function startActualTrials() {
   playBackground(0); // Only during actual trials
 
   // ✅ 80 total trials: 56 go, 24 nogo
-  actualStimuli = generateStimuli(2, 1);   /// 56 , 24
+  actualStimuli = generateStimuli(56, 24);
   shuffleArray(actualStimuli);
 
   // ✅ Fixation durations: 27x400, 27x500, 26x600
-  actualFixs = [...Array(1).fill(400), ...Array(1).fill(500), ...Array(1).fill(600)]; /// 27 27 26
+  actualFixs = [...Array(27).fill(400), ...Array(27).fill(500), ...Array(26).fill(600)];
   shuffleArray(actualFixs);
 
   // ✅ ITI durations: 27x900, 27x1000, 26x1100
-  actualITIs = [...Array(1).fill(900), ...Array(1).fill(1000), ...Array(1).fill(1100)];/// 27 27 26
+  actualITIs = [...Array(27).fill(900), ...Array(27).fill(1000), ...Array(26).fill(1100)];
   shuffleArray(actualITIs);
 
   actualIndex = 0;
@@ -780,12 +780,12 @@ document.getElementById("word-instr-next").onclick = function() {
 // grid
 //___________________________________________________
 
-const trials = 1; // Set to actual number of grid trials
+const trials = 11;
 const gridSize = 9; // 3x3
 const numbersPerGrid = 6;
-const displayTime = 1000; ////// 10s
+const displayTime = 10000;
 const getReadyTime = 5000;
-const recallTime = 18000;
+const recallTime = 23000;
 
 let currentTrial = 0;
 let gridTargetMap = {};
@@ -994,9 +994,7 @@ const recallOptions = [
   ["toothpaste", "white", "apple", "cloud"] // toothbrush (index 9)
 ];
 
-const wordDisplayMs  = 100;  // each pair for 5s ///////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////
+const wordDisplayMs  = 5000;
 const wordGetReadyMs = 10000; // 10s before recall 
 const wordRecallTime = 10000; // 10s per recall
 
@@ -1274,19 +1272,17 @@ function finishIcar() {
  ******************************************************************************/
 
 const oddTrials = [
-  // Visual 1 (from doc) — odd: 3rd block (index 2). Time: 25s
   {
     grid: [
       ["▢","▢","▢","▢","↘","▢","▢","▢","▢","↘","▢","▢","▢","▢","↘","▢"],
       ["▢","▢","▢","▢","▢","↘","▢","▢","▢","▢","↘","▢","▢","▢","▢","↘"],
-      ["▢","▢","▢","▢","▢","▢","↘","▢","▢","▢","▢","↘","↘","▢","▢","▢"],
+      ["↘","▢","▢","▢","▢","▢","↘","▢","▢","▢","▢","↘","▢","▢","▢","▢"],
       ["▢","↘","▢","▢","▢","▢","↘","▢","▢","▢","▢","↘","▢","▢","▢","▢"]
     ],
     oddIndex: 2,
-    duration: 25000
+    duration: 20000
   },
 
-  // Verbal 1 — Apple / Banana / Car / Orange — odd: "Car" (index 2). Time: 10s
   {
     grid: [
       ["Apple"],
@@ -1295,10 +1291,9 @@ const oddTrials = [
       ["Orange"]
     ],
     oddIndex: 2,
-    duration: 10000
+    duration: 8000
   },
 
-  // Visual 4 — rotation arrows — odd: 2nd row (index 1). Time: 15s
   {
     grid: [
       ["↺","↺","↺","↺","↺"],
@@ -1310,7 +1305,6 @@ const oddTrials = [
     duration: 15000
   },
 
-  // Verbal 2 — paired arrows (BOY→GIRL etc.) — odd: last row (index 3). Time: 15s
   {
     grid: [
       ["BOY","→","GIRL"],
@@ -1322,19 +1316,17 @@ const oddTrials = [
     duration: 15000
   },
 
-  // Visual 9 — moon phases — odd: 3rd row (index 2). Time: 20s
   {
     grid: [
       ["🌒","🌓","🌔","🌕"],
       ["🌖","🌕","🌔","🌓"],
-      ["🌘","🌑","🌒","🌓"],
+      ["🌘","🌔","🌒","🌓"],
       ["🌑","🌒","🌓","🌔"]
     ],
     oddIndex: 2,
-    duration: 20000
+    duration: 25000
   },
 
-  // Verbal 5 — FISH→WATER / PLANE→SKY / TRAIN→TRACK / BOOK→TITLE — odd: last (index 3). Time: 20s
   {
     grid: [
       ["FISH","→","WATER"],
@@ -1346,19 +1338,17 @@ const oddTrials = [
     duration: 20000
   },
 
-  // Visual 5 — double-arrow marks, odd: last row (index 3). Time: 15s
   {
     grid: [
       ["⇻","⇻","⇻","⇻","⇻"],
       ["⇻","⇻","⇻","⇻","⇻"],
       ["⇻","⇻","⇻","⇻","⇻"],
-      ["⇻","⇻","⇸","⇻","⇻"]
+      ["⇻","⇸","⇻","⇻","⇻"]
     ],
     oddIndex: 3,
     duration: 15000
   },
 
-  // Verbal — Dog / Cat / Chair / Cow — odd: "Chair" (index 2). Time: 10s
   {
     grid: [
       ["Dog"],
@@ -1370,19 +1360,17 @@ const oddTrials = [
     duration: 10000
   },
 
-  // Visual 3 — star shapes (6 cols) — odd: 3rd row (index 2). Time: 15s
   {
     grid: [
       ["❇","❇","❇","❇","❇","❇"],
       ["❇","❇","❇","❇","❇","❇"],
-      ["❇","❇","❇","❈","❇","❇"],
+      ["❇","❈","❇","❇","❇","❇"],
       ["❇","❇","❇","❇","❇","❇"]
     ],
     oddIndex: 2,
     duration: 15000
   },
 
-  // Verbal 9 — One / Three / Five / Ten — odd: "Ten" (index 3). Time: 15s
   {
     grid: [
       ["One"],
@@ -1394,19 +1382,17 @@ const oddTrials = [
     duration: 15000
   },
 
-  // Visual 2 — triangles 3x4 — odd: last row (index 3). Time: 15s
   {
     grid: [
-      ["🔺","🔺","🔺"],
-      ["🔻","🔻","🔻"],
-      ["🔺","🔺","🔺"],
-      ["🔻","🔻","🔺"]
+      ["🔺","🔺","🔺","🔻","🔻","🔻"],
+      ["🔻","🔻","🔻","🔺","🔺","🔺"],
+      ["🔺","🔺","🔺","🔻","🔻","🔻"],
+      ["🔻","🔻","🔺","🔺","🔺","🔺"]
     ],
     oddIndex: 3,
-    duration: 15000
+    duration: 17000
   },
 
-  // Verbal 11 — Ball / Egg / Cube / Circle — odd: "Cube" (index 2). Time: 15s
   {
     grid: [
       ["Ball"],
@@ -1418,7 +1404,6 @@ const oddTrials = [
     duration: 15000
   },
 
-  // Visual 8 — four 3x3 checker blocks (each block concatenated into a 9-cell row) — odd: 4th block (index 3). Time: 15s
   {
     grid: [
       ["⬜","⬛","⬜","⬛","⬜","⬛","⬜","⬛","⬜"],
@@ -1430,7 +1415,6 @@ const oddTrials = [
     duration: 15000
   },
 
-  // Verbal 13 — Drum / Bell / Cloud / Clap — odd: "Cloud" (index 2). Time: 20s
   {
     grid: [
       ["Drum"],
