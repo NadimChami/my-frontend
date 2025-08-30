@@ -1681,11 +1681,7 @@ const symbolTrials = [
   options: ["1F7WUS", "1F0WLS", "1F0WMS"],
   duration: 30000
 }
-
-
-
 ];
-
 let symbolIndex    = 0,
     symbolStart    = null,
     symbolInterval = null;
@@ -1694,6 +1690,7 @@ let symbolIndex    = 0,
 document.getElementById("symbol-instr-next").onclick = function() {
   playBackground(2);
   this.disabled = true;
+  formData.symbolMeta = formData.symbolMeta || {};
   formData.symbolMeta.start = Date.now();
   symbolIndex = 0;
   formData.symbolResults = { answers: [], accuracy: 0 };
@@ -1702,60 +1699,91 @@ document.getElementById("symbol-instr-next").onclick = function() {
 };
 
 function showNextSymbolTrial() {
+  // clean any previous timer
+  clearInterval(symbolInterval);
+
   // if all done, stop audio and proceed
   if (symbolIndex >= symbolTrials.length) {
     clearInterval(symbolInterval);
     stopBackground();
     formData.symbolMeta.end      = Date.now();
     formData.symbolMeta.duration = formData.symbolMeta.end - formData.symbolMeta.start;
-     
     goToPage("page-magnitude-instr");
     return;
   }
 
   const trial   = symbolTrials[symbolIndex];
   const section = document.getElementById(`page-symbol-${symbolIndex}`);
+  if (!section) {
+    console.error("Missing DOM section for symbol trial:", symbolIndex);
+    return;
+  }
   section.innerHTML = ""; 
 
-
-  // 2) Build the key
+  // --- Key / mapping ---
   const keyDiv = document.createElement("div");
   keyDiv.className = "symbol-key";
   keyDiv.innerHTML = trial.mapping.join("<br>");
   section.appendChild(keyDiv);
 
-  // 3) Build the prompt
+  // --- Prompt ---
   const codeDiv = document.createElement("div");
   codeDiv.className = "symbol-question";
   codeDiv.innerHTML = `<strong>Decode: ${trial.code}</strong>`;
   section.appendChild(codeDiv);
 
-  // 4) Build shuffled options
+  // --- Options area: vertical buttons (we force column layout) ---
+  const grid = document.createElement("div");
+  grid.id = `symbol-grid-${symbolIndex}`;
+  grid.className = "symbol-grid";
+  // Force vertical layout / full-width
+  grid.style.display = "flex";
+  grid.style.flexDirection = "column";
+  grid.style.gap = "12px";
+  grid.style.alignItems = "stretch";
+  grid.style.width = "100%";
+  grid.style.boxSizing = "border-box";
+  section.appendChild(grid);
+
+  // Prepare shuffled options (include correct answer)
   const opts = trial.options.slice();
   opts.push(trial.correct);
   shuffleArray(opts);
 
-  const formEl = document.createElement("form");
-  formEl.className = "symbol-options";
-  opts.forEach(opt => {
-    const lbl = document.createElement("label");
-    lbl.className = "option-label";
-    lbl.innerHTML = `<input type="radio" name="symbol-${symbolIndex}" value="${opt}" /> ${opt}`;
-    formEl.appendChild(lbl);
+  // Create a button for each option
+  opts.forEach((opt) => {
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "symbol-card";
+    // Inline styles ensure consistent vertical, full-width look even if CSS is missing
+    btn.style.width = "100%";
+    btn.style.maxWidth = "720px";
+    btn.style.margin = "0 auto";
+    btn.style.padding = "12px 16px";
+    btn.style.borderRadius = "8px";
+    btn.style.border = "2px solid rgba(11,61,145,0.08)";
+    btn.style.background = "#ffffff";
+    btn.style.textAlign = "center";
+    btn.style.display = "flex";
+    btn.style.alignItems = "center";
+    btn.style.justifyContent = "center";
+    btn.style.cursor = "pointer";
+    btn.style.fontSize = "1rem";
+    btn.style.transition = "transform .14s ease, box-shadow .14s ease";
+
+    btn.textContent = opt;
+
+    btn.onclick = () => {
+      // disable all buttons immediately to prevent double submission
+      Array.from(grid.querySelectorAll("button")).forEach(b => b.disabled = true);
+      clearInterval(symbolInterval);
+      collectSymbolResponse(false, opt);
+    };
+
+    grid.appendChild(btn);
   });
-  section.appendChild(formEl);
 
-  // 5) Auto-advance on choice
-  formEl
-    .querySelectorAll(`input[name="symbol-${symbolIndex}"]`)
-    .forEach(radio => {
-      radio.addEventListener("change", () => {
-        clearInterval(symbolInterval);
-        collectSymbolResponse(false);
-      });
-    });
-
-  // 6) Progress bar
+  // --- Progress bar ---
   const barC = document.createElement("div");
   barC.className = "progress-bar-container";
   const barF = document.createElement("div");
@@ -1764,10 +1792,10 @@ function showNextSymbolTrial() {
   barC.appendChild(barF);
   section.appendChild(barC);
 
-  // 7) Show the trial
+  // Show the trial page
   goToPage(`page-symbol-${symbolIndex}`);
 
-  // 8) Start timer
+  // --- Start timer & interval ---
   symbolStart = Date.now();
   barF.style.width = "100%";
   clearInterval(symbolInterval);
@@ -1777,22 +1805,26 @@ function showNextSymbolTrial() {
     barF.style.width = pct + "%";
     if (elapsed >= trial.duration) {
       clearInterval(symbolInterval);
-      collectSymbolResponse(true);
+      // disable buttons to avoid late clicks
+      Array.from(grid.querySelectorAll("button")).forEach(b => b.disabled = true);
+      collectSymbolResponse(true, null);
     }
   }, 100);
 }
 
-function collectSymbolResponse(timedOut) {
-  const now    = Date.now();
-  const radios = Array.from(
-    document.querySelectorAll(`input[name="symbol-${symbolIndex}"]`)
-  );
-  const sel    = radios.find(r => r.checked);
-  const answer = sel ? sel.value : null;
-  const trial  = symbolTrials[symbolIndex];
+function collectSymbolResponse(timedOut, chosenValue=null) {
+  const now   = Date.now();
+  const trial = symbolTrials[symbolIndex];
 
+  // If chosenValue provided, use it; otherwise see if a button/radio was selected
+  let answer = chosenValue;
+  if (answer == null) {
+    // find any button marked disabled + text? fallback to null
+    const btn = document.querySelector(`#symbol-grid-${symbolIndex} button[disabled]`);
+    if (btn) answer = btn.textContent || null;
+  }
 
-  // log full details
+  // Log trial
   formData.symbolLogs.push({
     trial:     symbolIndex,
     answer,
@@ -1801,11 +1833,14 @@ function collectSymbolResponse(timedOut) {
     rt:        timedOut ? null : (now - symbolStart)
   });
 
-  // update summary
+  // Update summary safely
   formData.symbolResults.answers[symbolIndex] = answer;
   if (answer === trial.correct) formData.symbolResults.accuracy++;
 
+  // advance
   symbolIndex++;
+  // small safety: clear interval again
+  clearInterval(symbolInterval);
   showNextSymbolTrial();
 }
 
