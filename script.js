@@ -1423,7 +1423,7 @@ const oddTrials = [
       ["Clap"]
     ],
     oddIndex: 2,
-    duration: 20000
+    duration: 15000
   }
 ];
 
