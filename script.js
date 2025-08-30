@@ -209,7 +209,7 @@ async function assignConditionFromBackend() {
   try {
     dlog && dlog("⏳ Sending eligibility payload:", eligibilityPayload);
 
-    const resp = await fetch("http://127.0.0.1:8000/assign_condition", {
+    const resp = await fetch("https://fastapi-backend-9k2l.onrender.com/api/submit", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(eligibilityPayload)
@@ -1964,7 +1964,7 @@ document.getElementById("post-survey-submit").addEventListener("click", async (e
   const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
 
   try {
-    const resp = await fetch("http://127.0.0.1:8000/submit", {
+    const resp = await fetch("https://fastapi-backend-9k2l.onrender.com/api/submit", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(payload),
