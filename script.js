@@ -1763,6 +1763,7 @@ function showNextSymbolTrial() {
     btn.style.borderRadius = "8px";
     btn.style.border = "2px solid rgba(11,61,145,0.08)";
     btn.style.background = "#ffffff";
+    btn.style.color = "#000000";
     btn.style.textAlign = "center";
     btn.style.display = "flex";
     btn.style.alignItems = "center";
