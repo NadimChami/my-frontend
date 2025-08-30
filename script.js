@@ -240,9 +240,9 @@ async function assignConditionFromBackend() {
     } else {
       // fallback mapping if backend returned only condition string (e.g., "Cond1")
       const latinSquare = {
-        Cond1: ["silence", "white", "music"],
-        Cond2: ["white",   "music", "silence"],
-        Cond3: ["music",   "silence","white"]
+        Cond1: ["silence", "pink", "music"],
+        Cond2: ["pink",   "music", "silence"],
+        Cond3: ["music",   "silence","pink"]
       };
       const raw = String(result.condition || "").trim();
       if (latinSquare[raw]) formData.conditionOrder = [...latinSquare[raw]];
