@@ -27,7 +27,7 @@ const pages = [
 ];
 
 // Toggle logging for development vs production
-window.DEBUG = false; // Set to false
+window.DEBUG = true; // Set to false
 
 // Lightweight logging helpers
 function dlog(...args) { if (window.DEBUG) console.log(...args); }
