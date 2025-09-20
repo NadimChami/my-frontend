@@ -211,7 +211,7 @@ async function assignConditionFromBackend() {
   try {
     dlog && dlog("⏳ Sending eligibility payload:", eligibilityPayload);
 
-    const resp = await fetch("https://fastapi-backend-9k2l.onrender.com/assign_condition", {
+    const resp = await fetch("https://my-backend-sj68.onrender.com/assign_condition", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(eligibilityPayload)
@@ -2041,7 +2041,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
 
     try {
-      const resp = await fetch("https://fastapi-backend-9k2l.onrender.com/submit", {
+      const resp = await fetch("https://my-backend-sj68.onrender.com/submit", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
