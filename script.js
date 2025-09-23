@@ -43,7 +43,7 @@ let formData = {
   condition: null,
   conditionOrder: [],
 
-  usesheadphone: "",
+  usesHeadphones: true | false,
 
   nativeLanguage: null,
   englishSkill: null,
@@ -325,8 +325,8 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   // ===== Volume → Data-privacy =====
   document.getElementById("volume-next").onclick = function () {
-    const headphone = document.getElementById("headphones").value;
-    formData.usesheadphone = headphone;
+    const noHeadphonesChecked = document.getElementById("no-headphones").checked;
+    formData.usesHeadphones = !noHeadphonesChecked;
     this.disabled = true;
     goToPage("data-privacy");
   };
