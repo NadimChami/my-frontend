@@ -43,7 +43,7 @@ let formData = {
   condition: null,
   conditionOrder: [],
 
-  usesheadphone: null,
+  usesheadphone: "",
 
   nativeLanguage: null,
   englishSkill: null,
