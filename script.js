@@ -7,7 +7,7 @@
  ******************************************************************************/
 
 const pages = [
-  "page-welcome", "page-volume", "page-language", "page-device-info", "page-eligibility",
+  "page-welcome", "page-volume", "data-privacy", "page-language", "page-device-info", "page-eligibility",
   "page-parent-consent", "page-youth-assent", "page-adult-consent",
   "page-conditions", "page-ineligible", "page-gender",
   "page-adhd-instr", "page-adhd-1", "page-adhd-2", "page-adhd-3", "page-adhd-4", "page-adhd-5", "page-adhd-6",
@@ -42,6 +42,8 @@ let formData = {
   sessionToken: null,
   condition: null,
   conditionOrder: [],
+
+  headphone: null,
 
   nativeLanguage: null,
   englishSkill: null,
@@ -321,8 +323,16 @@ document.addEventListener("DOMContentLoaded", async () => {
     goToPage("page-volume");
   };
 
-  // ===== Volume → Language =====
+  // ===== Volume → Data-privacy =====
   document.getElementById("volume-next").onclick = function () {
+    const headphone = document.getElementById("headphones").value;
+    formData.headphone = headphone;
+    this.disabled = true;
+    goToPage("data-privacy");
+  };
+
+  // ===== Data-privacy → Language =====
+  document.getElementById("data-next").onclick = function () {
     this.disabled = true;
     goToPage("page-language");
   };
@@ -1583,7 +1593,6 @@ document.addEventListener("DOMContentLoaded", async () => {
       });
     }
     else {
-      // NORMAL CASE: one button per row
       trial.grid.forEach((pattern, idx) => {
         const btn = document.createElement("button");
         btn.className = "odd-card";

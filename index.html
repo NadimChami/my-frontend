@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Cognitive Function Under Sound</title>
+  <title>Cognitive Tasks Battery</title>
   <script>
     window.onload = function () {
       const status = localStorage.getItem("participantStatus");
@@ -65,7 +65,7 @@
 
       <!-- =================== Welcome =================== -->
       <section id="page-welcome" class="page active">
-        <h1>Cognitive Tasks Battery!!!!!!!!!</h1>
+        <h1>Cognitive Tasks Battery</h1>
         <p>Researchers: Nadim Al Shami (<a
             href="mailto:nadimchami.research@gmail.com">nadimchami.research@gmail.com</a>)
           and Ece Kaya</p>
@@ -90,7 +90,7 @@
           and do not change the volume during the study.
           <br>Please use headphones or earphones. If you don’t have headphones, please check the box below.
         </p>
-        <label><input type="radio" name="headphones" value="no-headphone"> I do not have headphones and will use
+        <label><input type="radio" name="headphones" value="no"> I do not have headphones and will use
           speakers during the study.</label>
 
         <p>When you’re ready, click “Next” to continue</p>
@@ -101,8 +101,18 @@
         </div>
       </section>
 
+      <!-- =================== Data privacy =================== -->
+      <section id="data-privacy" class="page">
+        <p>data!!!!!!!!!!!!!!!!!!!!!</p>
+
+        <button id="data-next">Next</button>
+        <div class="footer-text">
+          Your responses are used solely for research purposes
+        </div>
+      </section>
+      
+      <!-- =================== Language =================== -->
       <section id="page-language" class="page">
-        <!-- =================== Language =================== -->
         <label for="native-language">Please indicate your native language:</label>
         <select id="native-language" name="native-language" required>
           <option value="" disabled selected>Select your native language</option>

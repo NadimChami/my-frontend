@@ -375,6 +375,8 @@ legend {
 
 .odd-card:hover {
   transform: scale(1.05);
+  background: #fff !important;
+  color: inherit !important;
 }
 
 .odd-card:active {
@@ -404,13 +406,13 @@ legend {
   text-align: center;
   font-size: 1.3rem;
   cursor: pointer;
-  transition: background 0.2s;
+  transition: transform 0.1s;
 }
 
 .mag-card:hover {
-  background: var(--primary);
-  color: #FFF;
+  transform: scale(1.05);
 }
+
 
 /* ——————————————————————————————————————————
    ICAR Test
