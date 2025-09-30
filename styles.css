@@ -174,12 +174,10 @@ fieldset {
 }
 
 legend {
-  font-weight: 600;
-  font-size: 1.05rem;
-  color: #000000;
+  font-weight: 500;
   padding: 0 0.5rem;
-  margin-left: 0.5rem;
 }
+
 
 
 /* ——————————————————————————————————————————
