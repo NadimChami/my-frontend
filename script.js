@@ -1292,22 +1292,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     recordIcarAnswer(2);
     goToIcarPage(3);
   };
-
-  // Q2 ← Q1
-  document.getElementById("icar-prev-1").onclick = () => {
-    goToIcarPage(0);
-  };
-
-  // Q3 ← Q2
-  document.getElementById("icar-prev-2").onclick = () => {
-    goToIcarPage(1);
-  };
-
-  // Q4 ← Q3
-  document.getElementById("icar-prev-3").onclick = () => {
-    goToIcarPage(2);
-  };
-
+  
   // Finish
   document.getElementById("icar-submit").onclick = function () {
     if (this.dataset.submitted) return;
