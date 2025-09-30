@@ -167,17 +167,13 @@ fieldset {
   border: 1px solid var(--border-light);
   border-radius: var(--radius);
   margin-bottom: var(--space);
-  padding: calc(var(--space) * 1.25);
-  background-color: #ffffff;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
-  transition: box-shadow 0.2s ease-in-out;
+  padding: var(--space);
 }
 
 legend {
   font-weight: 500;
   padding: 0 0.5rem;
 }
-
 
 
 /* ——————————————————————————————————————————
