@@ -72,7 +72,7 @@ label input {
    Layout & Panels
    —————————————————————————————————————————— */
 main {
-  max-width: 720px;
+  max-width: 960px;
   width: 100%;
   margin: 2rem auto;
   padding: var(--space);
