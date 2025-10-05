@@ -26,8 +26,7 @@ const pages = [
   "page-post-survey", "page-final-thankyou"
 ];
 
-// Toggle logging for development vs production
-window.DEBUG = true; // Set to false
+window.DEBUG = false;
 
 // Lightweight logging helpers
 function dlog(...args) { if (window.DEBUG) console.log(...args); }
@@ -563,11 +562,28 @@ document.addEventListener("DOMContentLoaded", async () => {
   let practiceStimuli = [], practiceIndex = 0, practiceTimeouts = [];
   let actualStimuli = [], actualFixs = [], actualITIs = [], actualIndex = 0, actualTimeouts = [];
   let rtSum = 0, rtCount = 0;
+  let currentResponseHandler = null;
+
+  document.addEventListener("keydown", function (e) {
+    if (!currentResponseHandler) return;
+    if (e.code === "Space" || e.code === "Enter") {
+      currentResponseHandler("keyboard");
+    }
+  });
+
+  document.addEventListener("click", function () {
+    if (currentResponseHandler) currentResponseHandler("mouse");
+  });
+
+  document.addEventListener("touchstart", function () {
+    if (currentResponseHandler) currentResponseHandler("touch");
+  }, { passive: true });
+
 
   // ====== START PRACTICE ======
   function startPracticeTrials() {
     clearAllTimeouts(practiceTimeouts);
-    practiceStimuli = generateStimuli(6, 4); // ✅ 10 practice trials: 6 go, 4 nogo
+    practiceStimuli = generateStimuli(6, 4); // 10 practice trials: 6 go, 4 nogo
     shuffleArray(practiceStimuli);
     practiceIndex = 0;
     runPracticeTrial();
@@ -606,11 +622,15 @@ document.addEventListener("DOMContentLoaded", async () => {
       let responded = false, responseTime = 0;
       const onset = performance.now();
 
-      goBtn.onclick = () => {
+      let inputMethod = null;
+
+      currentResponseHandler = (method) => {
         if (!responded) {
           responded = true;
           responseTime = performance.now() - onset;
+          inputMethod = method;
           goBtn.disabled = true;
+          currentResponseHandler = null;
         }
       };
 
@@ -641,15 +661,15 @@ document.addEventListener("DOMContentLoaded", async () => {
     clearAllTimeouts(actualTimeouts);
     playBackground(0); // Only during actual trials
 
-    // ✅ 80 total trials: 56 go, 24 nogo
+    // 80 total trials: 56 go, 24 nogo
     actualStimuli = generateStimuli(56, 24);
     shuffleArray(actualStimuli);
 
-    // ✅ Fixation durations: 27x400, 27x500, 26x600
+    // Fixation durations: 27x400, 27x500, 26x600
     actualFixs = [...Array(27).fill(400), ...Array(27).fill(500), ...Array(26).fill(600)];
     shuffleArray(actualFixs);
 
-    // ✅ ITI durations: 27x900, 27x1000, 26x1100
+    // ITI durations: 27x900, 27x1000, 26x1100
     actualITIs = [...Array(27).fill(900), ...Array(27).fill(1000), ...Array(26).fill(1100)];
     shuffleArray(actualITIs);
 
@@ -702,13 +722,18 @@ document.addEventListener("DOMContentLoaded", async () => {
         goBtn.disabled = false;
         let responded = false, responseTime = 0;
 
-        goBtn.onclick = () => {
+        let inputMethod = null;
+
+        currentResponseHandler = (method) => {
           if (!responded) {
             responded = true;
             responseTime = performance.now() - onset;
+            inputMethod = method;
             goBtn.disabled = true;
+            currentResponseHandler = null;
           }
         };
+
 
         // After 300ms of stimulus display, hide it
         const t2 = setTimeout(() => {
@@ -730,8 +755,10 @@ document.addEventListener("DOMContentLoaded", async () => {
               type: stimType,
               rt: responded ? responseTime : null,
               correct,
-              timedOut: !responded
+              timedOut: !responded,
+              inputMethod: responded ? inputMethod : null
             });
+
 
             // After ITI, move to next trial
             const t4 = setTimeout(() => {
@@ -862,10 +889,10 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     const bar = document.getElementById("grid-display-progress");
     bar.style.width = "100%";
-    const start = Date.now();
+    const start = performance.now();
 
     displayInterval = setInterval(() => {
-      const elapsed = Date.now() - start;
+      const elapsed = performance.now() - start;
       bar.style.width = Math.max(0, 100 - (elapsed / displayTime) * 100) + "%";
       if (elapsed >= displayTime) {
         clearInterval(displayInterval);
@@ -880,10 +907,10 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     const bar = document.getElementById("grid-getready-progress");
     bar.style.width = "100%";
-    const start = Date.now();
+    const start = performance.now();
 
     getReadyInterval = setInterval(() => {
-      const elapsed = Date.now() - start;
+      const elapsed = performance.now() - start;
       bar.style.width = Math.max(0, 100 - (elapsed / getReadyTime) * 100) + "%";
       if (elapsed >= getReadyTime) {
         clearInterval(getReadyInterval);
@@ -894,7 +921,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   function showRecallGrid() {
     const trial = formData.memoryBlock.grid.trials[currentTrial];
-    trial.recallStart = Date.now();
+    trial.recallStart = performance.now();
 
     playBackground(1); // Music starts again
 
@@ -969,10 +996,10 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     const bar = document.getElementById("grid-recall-progress");
     bar.style.width = "100%";
-    const start = Date.now();
+    const start = performance.now();
 
     recallInterval = setInterval(() => {
-      const elapsed = Date.now() - start;
+      const elapsed = performance.now() - start;
       bar.style.width = Math.max(0, 100 - (elapsed / recallTime) * 100) + "%";
       if (elapsed >= recallTime) {
         clearInterval(recallInterval);
@@ -990,7 +1017,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     stopBackground(); // Stop music
 
     const trial = formData.memoryBlock.grid.trials[currentTrial];
-    trial.recallEnd = Date.now();
+    trial.recallEnd = performance.now();
     trial.recallDuration = trial.recallEnd - trial.recallStart;
     trial.timedOut = timedOut;
 
@@ -1071,10 +1098,10 @@ document.addEventListener("DOMContentLoaded", async () => {
     const bar1 = document.getElementById("word-display-progress");
     bar1.style.width = "100%";
     const total = wordPairs.length * wordDisplayMs;
-    const start1 = Date.now();
+    const start1 = performance.now();
 
     wordDisplayInterval = setInterval(() => {
-      const elapsed = Date.now() - start1;
+      const elapsed = performance.now() - start1;
       bar1.style.width = Math.max(0, 100 - (elapsed / total) * 100) + "%";
       if (elapsed >= total) {
         clearInterval(wordDisplayInterval);
@@ -1099,10 +1126,10 @@ document.addEventListener("DOMContentLoaded", async () => {
     goToPage("page-word-getready");
     const bar2 = document.getElementById("word-getready-progress");
     bar2.style.width = "100%";
-    const start2 = Date.now();
+    const start2 = performance.now();
 
     wordGetReadyInterval = setInterval(() => {
-      const elapsed = Date.now() - start2;
+      const elapsed = performance.now() - start2;
       bar2.style.width = Math.max(0, 100 - (elapsed / wordGetReadyMs) * 100) + "%";
       if (elapsed >= wordGetReadyMs) {
         clearInterval(wordGetReadyInterval);
@@ -1149,7 +1176,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     grid.style.margin = "12px 0";
 
     // Record when choices shown
-    const choiceShownTime = Date.now();
+    const choiceShownTime = performance.now();
 
     opts.forEach(opt => {
       const btn = document.createElement("button");
@@ -1157,7 +1184,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       btn.textContent = opt;
       btn.addEventListener("click", () => {
         // direct answer (no submit)
-        const rt = Date.now() - choiceShownTime;
+        const rt = performance.now() - choiceShownTime;
         const correct = (opt === correctWord);
 
         formData.memoryBlock.word.recalls.push({
@@ -1179,14 +1206,13 @@ document.addEventListener("DOMContentLoaded", async () => {
     // Start recall timer
     const bar3 = document.getElementById(`word-recall-bar-${wordRecallIndex}`);
     bar3.style.width = "100%";
-    const start3 = Date.now();
+    const start3 = performance.now();
 
     wordRecallInterval = setInterval(() => {
-      const elapsed = Date.now() - start3;
+      const elapsed = performance.now() - start3;
       bar3.style.width = Math.max(0, 100 - (elapsed / wordRecallTime) * 100) + "%";
       if (elapsed >= wordRecallTime) {
         clearInterval(wordRecallInterval);
-        // Participant did not click in time => timed out
         formData.memoryBlock.word.recalls.push({
           cue,
           answer: null,
@@ -1221,7 +1247,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 
   function updateIcarTimer() {
-    const elapsed = Date.now() - icarStart;
+    const elapsed = performance.now() - icarStart;
     const remaining = Math.max(0, icarDuration - elapsed);
     const mins = String(Math.floor(remaining / 60000)).padStart(2, "0");
     const secs = String(Math.floor((remaining % 60000) / 1000)).padStart(2, "0");
@@ -1242,7 +1268,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   document.getElementById("icar-intro-next").onclick = function () {
     this.disabled = true;
-    icarStart = Date.now();
+    icarStart = performance.now();
     setIcarTimerVisible(true);
     updateIcarTimer();
     icarTimer = setInterval(updateIcarTimer, 1000);
@@ -1255,7 +1281,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     icarCurrentPage = 0;
     goToPage("page-icar-0");
-    icarQuestionStart = Date.now();
+    icarQuestionStart = performance.now();
   };
 
   function recordIcarAnswer(idx) {
@@ -1264,7 +1290,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     if (!alreadyAnswered) {
       formData.icar.answers[idx] = sel ? sel.value : null;
-      formData.icar.rts[idx] = sel ? Date.now() - icarQuestionStart : null;
+      formData.icar.rts[idx] = sel ? performance.now() - icarQuestionStart : null;
       formData.icar.timedOut[idx] = !sel;
     }
   }
@@ -1272,7 +1298,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   function goToIcarPage(idx) {
     icarCurrentPage = idx;
     goToPage(`page-icar-${idx}`);
-    icarQuestionStart = Date.now();
+    icarQuestionStart = performance.now();
   }
 
   // Q1 → Q2
@@ -1292,7 +1318,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     recordIcarAnswer(2);
     goToIcarPage(3);
   };
-  
+
   // Finish
   document.getElementById("icar-submit").onclick = function () {
     if (this.dataset.submitted) return;
@@ -1601,10 +1627,10 @@ document.addEventListener("DOMContentLoaded", async () => {
     // Start progress bar countdown
     const bar = document.getElementById(`odd-bar-${oddIndex}`);
     if (bar) bar.style.width = "100%";
-    trialStartTime = Date.now();
+    trialStartTime = performance.now();
 
     oddInterval = setInterval(() => {
-      const elapsed = Date.now() - trialStartTime;
+      const elapsed = performance.now() - trialStartTime;
       const pct = Math.max(0, 100 - (elapsed / trial.duration) * 100);
       if (bar) bar.style.width = pct + "%";
     }, 50);
@@ -1620,7 +1646,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     const trial = oddTrials[oddIndex];
     const correct = chosenIdx === trial.oddIndex;
-    const now = Date.now();
+    const now = performance.now();
     const rt = timedOut ? null : now - trialStartTime;
 
     formData.oddResults.push({
@@ -1832,11 +1858,11 @@ document.addEventListener("DOMContentLoaded", async () => {
     goToPage(`page-symbol-${symbolIndex}`);
 
     // --- Start timer & interval ---
-    symbolStart = Date.now();
+    symbolStart = performance.now();
     barF.style.width = "100%";
     clearInterval(symbolInterval);
     symbolInterval = setInterval(() => {
-      const elapsed = Date.now() - symbolStart;
+      const elapsed = performance.now() - symbolStart;
       const pct = Math.max(0, 100 - (elapsed / trial.duration) * 100);
       barF.style.width = pct + "%";
       if (elapsed >= trial.duration) {
@@ -1849,7 +1875,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 
   function collectSymbolResponse(timedOut, chosenValue = null) {
-    const now = Date.now();
+    const now = performance.now();
     const trial = symbolTrials[symbolIndex];
 
     // If chosenValue provided, use it; otherwise see if a button/radio was selected
@@ -1933,7 +1959,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     // show trial
     goToPage(`page-magnitude-${magnitudeIndex}`);
-    magnitudeStart = Date.now();
+    magnitudeStart = performance.now();
 
     // wire up response buttons
     ["left", "right"].forEach(side => {
@@ -1948,7 +1974,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     clearInterval(magnitudeInterval);
 
     magnitudeInterval = setInterval(() => {
-      const elapsed = Date.now() - magnitudeStart;
+      const elapsed = performance.now() - magnitudeStart;
       const pct = Math.max(0, 100 - (elapsed / magnitudeDuration) * 100);
       bar.style.width = pct + "%";
       if (elapsed >= magnitudeDuration) {
@@ -1967,7 +1993,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     clearTimeout(magnitudeTimeout);
     clearInterval(magnitudeInterval);
 
-    const now = Date.now();
+    const now = performance.now();
     const trial = magnitudeChoices[magnitudeIndex];
     const correct = (chosen === trial.correct);
 
