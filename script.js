@@ -2103,6 +2103,21 @@ document.addEventListener("DOMContentLoaded", async () => {
 });
 
 
+// ===============================
+// Backend Pinger
+// ===============================
+
+const BACKEND_HEALTH_URL = 'https://my-backend-sj68.onrender.com/health';
+
+function pingBackend() {
+  fetch(BACKEND_HEALTH_URL)
+    .then(() => console.log('[PING] Backend pinged successfully'))
+    .catch((err) => console.warn('[PING] Failed to ping backend', err));
+}
+
+pingBackend();
+
+setInterval(pingBackend, 13 * 60 * 1000);
 
 
 window.addEventListener('beforeunload', function (e) {
