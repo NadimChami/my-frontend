@@ -1524,7 +1524,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     oddIndex = 0;
     formData.oddMeta = { start: Date.now(), end: null, duration: null };
     formData.oddResults = [];
-    playBackground(2);
     showOddTrial();
   };
 
@@ -1540,7 +1539,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       goToPage("page-symbol-instr");
       return;
     }
-
+    if (oddIndex === 0) playBackground(2);
     // clear prior timers
     clearInterval(oddInterval);
     clearTimeout(oddTimeout);
@@ -1749,7 +1748,6 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   // 1) Intro “Next” → first trial
   document.getElementById("symbol-instr-next").onclick = function () {
-    playBackground(2);
     this.disabled = true;
     formData.symbolMeta = formData.symbolMeta || {};
     formData.symbolMeta.start = Date.now();
@@ -1772,6 +1770,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       goToPage("page-magnitude-instr");
       return;
     }
+    if (symbolIndex === 0) playBackground(2);
 
     const trial = symbolTrials[symbolIndex];
     const section = document.getElementById(`page-symbol-${symbolIndex}`);
@@ -1940,7 +1939,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     magnitudeIndex = 0;
     formData.magnitudeResults = { chosenIndices: [], accuracy: 0 };
     formData.magnitudeLogs = [];
-    playBackground(2);
     showMagnitudeTrial();
   };
 
@@ -1955,6 +1953,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
       return goToPage("page-post-survey");
     }
+    if (magnitudeIndex === 0) playBackground(2);
 
 
     // show trial
