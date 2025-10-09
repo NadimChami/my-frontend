@@ -26,7 +26,7 @@ const pages = [
   "page-post-survey", "page-final-thankyou"
 ];
 
-window.DEBUG = true;
+window.DEBUG = false;
 
 // Lightweight logging helpers
 function dlog(...args) { if (window.DEBUG) console.log(...args); }
